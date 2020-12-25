@@ -146,7 +146,7 @@ window.App = new Vue({
     },
     mounted() {
         // console.log(JSON.stringify(Store.state.user));
-        this.frequentRequest();
+        // this.frequentRequest();
     }
 }).$mount('#app');
 
