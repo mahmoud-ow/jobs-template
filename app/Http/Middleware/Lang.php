@@ -18,7 +18,7 @@ class Lang
         $host = $_SERVER['HTTP_HOST']; 
         
         
-        if($host == "www.jobsjobs.us" or $host == "jobsjobs.us" or $host == '127.0.0.1:8000') {
+        if($host == "www.jobsjobs.us" or $host == "jobsjobs.us" or $host == '127.0.0.1:8000' or $host == 'owcode.com') {
         } else {
             die;
         }
