@@ -128,7 +128,11 @@ window.App = new Vue({
                         conversation_last_partner_reply_id: self.conversation_last_partner_reply_id
                     }
                 }).then((response) => {
-                    console.log( JSON.stringify(response.data) )
+                    var response = response.data;
+                    
+                    if( response.activeConversation_id == self.activeConversation_id &&  response.conversation_last_partner_reply_id == self.conversation_last_partner_reply_id ){
+                        self.$store.state.conversation.conversation_newReplies = response.new_replies;
+                    }
                     (self.runningRequests > 0) ? self.$store.state.runningRequests -= 1 : null;
                 }).catch((err) => {
                     (self.runningRequests > 0) ? self.$store.state.runningRequests -= 1 : null;
@@ -146,7 +150,7 @@ window.App = new Vue({
     },
     mounted() {
         // console.log(JSON.stringify(Store.state.user));
-        // this.frequentRequest();
+        this.frequentRequest();
     }
 }).$mount('#app');
 

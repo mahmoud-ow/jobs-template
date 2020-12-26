@@ -7,7 +7,7 @@ use App\Http\Controllers\MessageController;
 use App\Http\Controllers\MetaTagController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\NotificationController;
-use App\Http\Controllers\FrequentRequest;
+use App\Http\Controllers\FrequentRequestController;
 
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
@@ -80,4 +80,4 @@ Route::prefix('/conversations')->group(function () {
 
 
 
-Route::get('/frequent-request', [FrequentRequest::class,'frequentRequest']);
+Route::get('/frequent-request', [FrequentRequestController::class,'frequentRequest']);

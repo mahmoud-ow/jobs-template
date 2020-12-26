@@ -173,7 +173,9 @@ export default {
       conversation_partner_id: state =>
         state.conversation.conversation_partner_id,
       conversation_last_partner_reply_id: state =>
-        state.conversation.conversation_last_partner_reply_id
+        state.conversation.conversation_last_partner_reply_id,
+      conversation_newReplies: state =>
+        state.conversation.conversation_newReplies
     })
   },
   watch: {
@@ -182,6 +184,11 @@ export default {
     },
     user: function() {
       this.fetchConversations();
+    },
+    conversation_newReplies: function() {
+      if (this.conversation_newReplies != "") {
+        this.appendNewConversationReplies();
+      }
     }
   },
   methods: {
@@ -444,65 +451,22 @@ export default {
           });
       }
     },
-    fetchNewConversationReplies() {
-      if (window.active_chat != 0) {
-        console.log(window.active_chat);
+    appendNewConversationReplies() {
+      var self = this;
+      $("#active-conversation-replies").append(self.conversation_newReplies);
+
+      var partnerReplies = document.querySelectorAll(".partner_user_reply");
+      if (partnerReplies.length > 0) {
+        var lastPartnerReply = partnerReplies[
+          partnerReplies.length - 1
+        ].getAttribute("data-reply-id");
       } else {
-        console.log(0);
+        var lastPartnerReply = 0;
       }
+      self.updatePartnerLastReplyId(lastPartnerReply);
 
-      if (window.active_chat != 0) {
-        var partnerReplies = document.querySelectorAll(".partner_user_reply");
-
-        if (partnerReplies.length > 0) {
-          var lastPartnerReply = partnerReplies[
-            partnerReplies.length - 1
-          ].getAttribute("data-reply-id");
-        } else {
-          var lastPartnerReply = 0;
-        }
-
-        axios
-          .get(
-            "/chat/conversations/new_replies/" +
-              window.active_chat +
-              "/" +
-              lastPartnerReply
-          )
-          .then(function(response) {
-            if (response.data.replies) {
-              if (
-                window.activeConversation.scrollTop ==
-                window.activeConversation.scrollHeight -
-                  $("#active-conversation").height()
-              ) {
-                $("#active-conversation-replies").append(response.data.replies);
-                window.activeConversation.scrollTop =
-                  window.activeConversation.scrollHeight;
-              } else {
-                $("#active-conversation-replies").append(response.data.replies);
-                $("#new-partner-replies-go-down").addClass("visible");
-                setTimeout(function() {
-                  $("#new-partner-replies-go-down").removeClass("visible");
-                }, 3000);
-              }
-            }
-          })
-          .catch(error => {})
-          .then(() => {
-            // always executed
-            setTimeout(
-              window.loadPartnerNewReplies,
-              window.active_chat_refresh_timer
-            );
-          });
-        /* /axios */
-      } else {
-        setTimeout(
-          window.loadPartnerNewReplies,
-          window.active_chat_refresh_timer
-        );
-      }
+      self.activeConversationContainer.scrollTop =
+        self.activeConversationContainer.scrollHeight;
     }
   },
 

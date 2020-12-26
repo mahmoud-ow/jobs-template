@@ -1,4 +1,5 @@
 import axios from 'axios'
+import Store from "./../store/store"
 // import nProgress from 'nprogress'
 
 const apiClient = axios.create({
@@ -11,6 +12,32 @@ const apiClient = axios.create({
   },
 })
 
+apiClient.interceptors.request.use(
+  function (config) {
+    Store.state.runningRequests += 1;
+    return config;
+  },
+  function (error) {
+    Store.state.runningRequests > 0
+      ? (Store.state.runningRequests -= 1)
+      : null;
+    return Promise.reject(error);
+  }
+);
+apiClient.interceptors.response.use(
+  function (response) {
+    Store.state.runningRequests > 0
+      ? (Store.state.runningRequests -= 1)
+      : null;
+    return response;
+  },
+  function (error) {
+    Store.state.runningRequests > 0
+      ? (Store.state.runningRequests -= 1)
+      : null;
+    return Promise.reject(error.message);
+  }
+);
 
 export default {
   fetchConversations(params) {

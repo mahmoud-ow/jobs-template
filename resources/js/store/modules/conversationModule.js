@@ -6,6 +6,7 @@ export const state = {
   activeConversation_id: 0, // current active conversation
   conversation_partner_id: 0, // this is a two people chat system ( <-- partner + current auth )
   conversation_last_partner_reply_id: 0, // this will be set when loading a conversation first time to check for new replies
+  conversation_newReplies: '',
 }
 
 export const mutations = {

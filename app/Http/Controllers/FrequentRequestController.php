@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use \App\Models\Message;
 
-class FrequentRequest extends Controller
+class FrequentRequestController extends Controller
 {
     public function FrequentRequest(Request $request){
         
@@ -43,8 +43,10 @@ class FrequentRequest extends Controller
             
             return response()->json([
                 'error' => 0,
-                'message' => 'ok',
-                'replies' => $replies_html,
+                'activeConversation_id' => $activeConversation_id,
+                'conversation_last_partner_reply_id' => $conversation_last_partner_reply_id,
+                'conversation_partner_id'=> $conversation_partner_id,
+                'new_replies' => $replies_html,
             ]);
 
         }
